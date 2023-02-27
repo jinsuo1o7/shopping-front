@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, addNewProduct } from "../api/firebase";
+import { getProducts, addNewProduct } from "../api/rest/rest";
 
 export default function useProducts() {
   const queryClient = useQueryClient();
 
-  const productsQuery = useQuery(["products"], getProducts, {
+  const getAllProducts = useQuery(["products"], getProducts, {
     staleTime: 1000 * 60,
   });
 
@@ -13,5 +13,5 @@ export default function useProducts() {
     { onSuccess: () => queryClient.invalidateQueries(["products"]) }
   );
 
-  return { productsQuery, addProduct };
+  return { getAllProducts, addProduct };
 }

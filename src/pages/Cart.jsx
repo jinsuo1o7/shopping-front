@@ -11,8 +11,8 @@ export default function Cart() {
     getCarts: { isLoading, data: products },
   } = useCarts();
 
-  if (isLoading) return <p>Loading</p>;
   const hasProducts = products && products.length > 0;
+  const SHIPPING = 3000;
   const totalPrice =
     hasProducts &&
     products.reduce(
@@ -20,8 +20,8 @@ export default function Cart() {
         prev + parseInt(current.price) * parseInt(current.quantity),
       0
     );
-  const SHIPPING = 3000;
 
+  if (isLoading) return <p>Loading</p>;
   return (
     <section className="p-8 flex flex-col">
       <p className="text-2xl text-center font-bold pb-4 border-b border-gray-300">

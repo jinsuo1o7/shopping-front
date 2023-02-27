@@ -11,21 +11,28 @@ export default function ProductNew() {
   const { addProduct } = useProducts();
 
   const handleSubmit = (e) => {
+    const url = "sample";
     e.preventDefault();
     setIsUploading(true);
-    uploadImage(file)
-      .then((url) => {
-        addProduct.mutate(
-          { product, url },
-          {
-            onSuccess: () => {
-              setSuccess("성공적으로 제품이 추가 되었어요");
-              setTimeout(() => setSuccess(null), 4000);
-            },
-          }
-        );
-      })
-      .finally(() => setIsUploading(false));
+    product.categories = product.categories.split(",");
+    product.sizeType = product.sizeType.split(",");
+    addProduct.mutate({ product, url });
+    // uploadImage(file)
+    //   .then((url) => {
+    //     addProduct.mutate(
+    //       {
+    //         product: { ...product, categories: product.categories.split(",") },
+    //         url,
+    //       },
+    //       {
+    //         onSuccess: () => {
+    //           setSuccess("성공적으로 제품이 추가 되었어요");
+    //           setTimeout(() => setSuccess(null), 4000);
+    //         },
+    //       }
+    //     );
+    //   })
+    //   .finally(() => setIsUploading(false));
   };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -57,8 +64,16 @@ export default function ProductNew() {
         />
         <input
           type="text"
-          name="title"
-          value={product.title ?? ""}
+          name="type"
+          value={product.type ?? ""}
+          placeholder="제품 분류"
+          required
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="name"
+          value={product.name ?? ""}
           placeholder="제품명"
           required
           onChange={handleChange}
@@ -72,9 +87,17 @@ export default function ProductNew() {
           onChange={handleChange}
         />
         <input
+          type="number"
+          name="stockQauntity"
+          value={product.stockQauntity ?? ""}
+          placeholder="수량"
+          required
+          onChange={handleChange}
+        />
+        <input
           type="text"
-          name="category"
-          value={product.category ?? ""}
+          name="categories"
+          value={product.categories ?? ""}
           placeholder="카테고리"
           required
           onChange={handleChange}
@@ -89,9 +112,9 @@ export default function ProductNew() {
         />
         <input
           type="text"
-          name="options"
-          value={product.options ?? ""}
-          placeholder="옵션들"
+          name="sizeType"
+          value={product.sizeType ?? ""}
+          placeholder="사이즈 옵션"
           required
           onChange={handleChange}
         />

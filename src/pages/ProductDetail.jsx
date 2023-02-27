@@ -1,20 +1,44 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Button from "../components/ui/Button";
 import { useCarts } from "../hooks/useCarts";
 
 export default function ProductDetail() {
   const {
-    state: {
-      product: { id, image, title, description, category, price, options },
-    },
+    state: { id },
   } = useLocation();
+  useEffect(() => {
+    loadProduct();
+  }, []);
+
   const { addOrUpdateItem } = useCarts();
-  const [selected, setSelected] = useState(options && options[0]);
   const [success, setSuccess] = useState();
-  const handleSelect = (e) => setSelected(e.target.value);
-  const handleClick = (e) => {
-    const product = { id, image, title, price, options: selected, quantity: 1 };
+
+  const [product, setProduct] = useState({});
+  const [selected, setSelected] = useState();
+  const { imageUrl, name, price, description } = product;
+
+  const loadProduct = async () => {
+    const { data } = await axios.get(`/products/${id}`);
+    setProduct(data);
+  };
+
+  const handleSelect = (e) => {
+    setSelected(e.target.value);
+  };
+
+  const defaultOption = "옵션을 선택해주세요.";
+  const handleClick = () => {
+    if (selected === defaultOption || selected === undefined) return;
+    const product = {
+      id,
+      imageUrl,
+      name,
+      price,
+      sizeType: selected,
+      quantity: 1,
+    };
     addOrUpdateItem.mutate(product, {
       onSuccess: () => {
         setSuccess("장바구니에 추가되었어요");
@@ -24,28 +48,32 @@ export default function ProductDetail() {
   };
 
   return (
-    <section>
-      <p className="mx-12 mt-4 text-gray-700">{category}</p>
+    <section className="flex flex-col justify-center min-h-screen border">
       <section className="flex flex-col md:flex-row p-4">
-        <img className="w-full px-4 basis-7/12" src={image} alt={title} />
+        <img
+          className="w-full max-w-3xl px-4 basis-7/12"
+          src={imageUrl}
+          alt={name}
+        />
         <div className="w-full basis-5/12 flex flex-col p-4">
-          <h2 className="text-3xl font-bold py-2">{title}</h2>
+          <h2 className="text-3xl font-bold py-2">{name}</h2>
           <p className="text-2xl font-bold py-2 border-b border-gray-400">
             ₩{price}
           </p>
           <p className="py-4 text-lg">{description}</p>
           <div className="flex items-center">
-            <label className="text-brand font-bold" htmlFor="select">
-              option:
-            </label>
+            <div className="text-brand font-bold mr-5" htmlFor="select">
+              size:
+            </div>
             <select
               id="select"
-              className="p-2 m-4 flex-1 border-2 border-dashed border-brand outline-none"
+              className="p-2 m-4 flex-1 border-2 border-brand outline-none"
               onChange={handleSelect}
               value={selected}
             >
-              {options &&
-                options.map((option, index) => (
+              <option>{defaultOption}</option>
+              {product.sizeType &&
+                product.sizeType.map((option, index) => (
                   <option key={index}>{option}</option>
                 ))}
             </select>
@@ -54,6 +82,14 @@ export default function ProductDetail() {
           {success && <p className="my-2">🙏{success}</p>}
         </div>
       </section>
+      <ul className="flex">
+        {product.categories &&
+          product.categories.map((category, index) => (
+            <li key={index} className="ml-8 mt-4 text-gray-500">
+              {category}
+            </li>
+          ))}
+      </ul>
     </section>
   );
 }
