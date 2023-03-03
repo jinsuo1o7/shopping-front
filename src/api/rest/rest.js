@@ -1,18 +1,13 @@
 import axios from "axios";
 
-const httpClient = axios.create({
-  baseURL: "https://localhost:8080",
-});
-
 export async function addNewProduct(product, imageUrl) {
-  httpClient.post("/products/new", {
-    ...product,
-    imageUrl,
-  });
+  product = { ...product, imageUrl };
+  const { data } = await axios.post("/products/new", product);
+  return data;
 }
 
 export async function getProducts() {
-  const { data } = await axios.get("/products");
+  const { data } = await axios.get("/products?page=0");
   return data;
 }
 
@@ -21,8 +16,12 @@ export async function getProductById(id) {
   return data;
 }
 
-export async function getCart(userId) {}
+export async function getCategories() {
+  const { data } = await axios.get("/categories");
+  return data;
+}
 
-export async function addOrUpdateToCart(userId, product) {}
-
-export async function removeFromCart(userId, productId) {}
+export async function getSizes() {
+  const { data } = await axios.get("/sizes");
+  return data;
+}

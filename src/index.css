@@ -21,5 +21,5 @@ code {
 }
 
 input {
-  @apply p-4 outline-none border border-gray-300 my-1;
+  @apply p-3 outline-none border border-gray-300 my-1 rounded-lg;
 }

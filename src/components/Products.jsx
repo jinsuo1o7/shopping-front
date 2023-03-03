@@ -4,7 +4,7 @@ import ProductCard from "./ProductCard";
 
 export default function Products() {
   const {
-    getAllProducts: { isLoading, error, data: products },
+    getAllProducts: { isLoading, error, data },
   } = useProducts();
 
   return (
@@ -13,11 +13,14 @@ export default function Products() {
       {error && <p>Error ...</p>}
 
       <ul className="grid grid-cols-1 md:grid-cols-3 lg:cols-4 gap-4 p-4">
-        {products &&
-          products.map((product) => (
+        {data &&
+          data.content &&
+          data.content.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
       </ul>
+
+      <div className="border">{data && data.totalPages}</div>
     </>
   );
 }

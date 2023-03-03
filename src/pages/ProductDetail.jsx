@@ -67,14 +67,17 @@ export default function ProductDetail() {
             </div>
             <select
               id="select"
-              className="p-2 m-4 flex-1 border-2 border-brand outline-none"
+              className="p-2 m-4 flex-1 border-2 border-brand outline-none rounded-lg"
               onChange={handleSelect}
               value={selected}
             >
               <option>{defaultOption}</option>
-              {product.sizeType &&
-                product.sizeType.map((option, index) => (
-                  <option key={index}>{option}</option>
+              {product.sizeAndStocks &&
+                product.sizeAndStocks.map((sas, index) => (
+                  <option key={index}>
+                    {/* size:{sas.sizeType} quantity:{sas.stockQuantity} */}
+                    {sas.sizeType}
+                  </option>
                 ))}
             </select>
           </div>
@@ -82,14 +85,17 @@ export default function ProductDetail() {
           {success && <p className="my-2">🙏{success}</p>}
         </div>
       </section>
-      <ul className="flex">
-        {product.categories &&
-          product.categories.map((category, index) => (
-            <li key={index} className="ml-8 mt-4 text-gray-500">
-              {category}
-            </li>
-          ))}
-      </ul>
+      <div className="flex items-center ml-4">
+        <p className="font-bold">Category</p>
+        <ul className="flex">
+          {product.categories &&
+            product.categories.map((category, index) => (
+              <li key={index} className="ml-8 text-gray-500">
+                {category}
+              </li>
+            ))}
+        </ul>
+      </div>
     </section>
   );
 }

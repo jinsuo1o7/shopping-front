@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, addNewProduct } from "../api/rest/rest";
+import {
+  getProducts,
+  addNewProduct,
+  getCategories,
+  getSizes,
+} from "../api/rest/rest";
 
 export default function useProducts() {
   const queryClient = useQueryClient();
@@ -8,10 +13,18 @@ export default function useProducts() {
     staleTime: 1000 * 60,
   });
 
+  const getAllCategories = useQuery(["category"], getCategories, {
+    staleTime: 1000 * 60,
+  });
+
+  const getAllSizes = useQuery(["sizes"], getSizes, {
+    staleTime: 1000 * 60,
+  });
+
   const addProduct = useMutation(
     ({ product, url }) => addNewProduct(product, url),
     { onSuccess: () => queryClient.invalidateQueries(["products"]) }
   );
 
-  return { getAllProducts, addProduct };
+  return { getAllProducts, getAllCategories, getAllSizes, addProduct };
 }
