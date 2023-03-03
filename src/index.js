@@ -11,7 +11,6 @@ import ProductDetail from "./pages/ProductDetail";
 import ProductNew from "./pages/ProductNew";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Home from "./pages/Home";
-import AddTest from "./pages/AddTest";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +29,6 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/products/:id", element: <ProductDetail /> },
-      { path: "/test", element: <AddTest /> },
       {
         path: "/carts",
         element: (
